@@ -33,3 +33,39 @@ class User(SQLModel, table=True):
             "onupdate": lambda: datetime.now(timezone.utc)
         }
     )
+
+    oauth_accounts: list["OAuthAccount"] = Relationship(back_populates="user")
+
+class OAuthAccount(SQLModel, table=True):
+    __tablename__="oauth_accounts"
+    __table_args__=(
+        UniqueConstraint(
+            "provider",
+            "provider_account_id",
+            name="uq_provider_provider_account_id"
+        ),
+    )
+
+    provider: str = Field(max_length=10, description="OAuth 제공자")
+    provider_account_id: str = Field(max_length=128, description="OAuth 제공자 계정 ID")
+
+    user_id: int = Field(foreign_key="users.id")
+    user: User = Relationship(back_populates="oauth_accounts")
+
+    created_at: AwareDatetime = Field(
+        default=None,
+        nullable=False,
+        sa_type=UtcDateTime,
+        sa_column_kwargs={
+            "server_default": func.now(),
+        }
+    )
+    updated_at: AwareDatetime = Field(
+        default=None,
+        nullable=False,
+        sa_type=UtcDateTime,
+        sa_column_kwargs={
+            "server_default": func.now(),
+            "onupdate": lambda: datetime.now(timezone.utc)
+        }
+    )
