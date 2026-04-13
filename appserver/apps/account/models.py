@@ -46,6 +46,8 @@ class OAuthAccount(SQLModel, table=True):
         ),
     )
 
+    id: int = Field(default=None, primary_key=True)
+    
     provider: str = Field(max_length=10, description="OAuth 제공자")
     provider_account_id: str = Field(max_length=128, description="OAuth 제공자 계정 ID")
 
