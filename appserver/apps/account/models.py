@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 from sqlmodel import SQLModel, Field, Relationship, func
 from pydantic import EmailStr, AwareDatetime
 from sqlalchemy import UniqueConstraint
+from sqlalchemy_utc import UtcDateTime
 
 class User(SQLModel, table=True):
     __tablename__="users"
@@ -18,6 +19,7 @@ class User(SQLModel, table=True):
     created_at: AwareDatetime = Field(
         default=None,
         nullable=False,
+        sa_type=UtcDateTime,
         sa_column_kwargs={
             "server_default": func.now(),
         }
@@ -25,6 +27,7 @@ class User(SQLModel, table=True):
     updated_at: AwareDatetime = Field(
         default=None,
         nullable=False,
+        sa_type=UtcDateTime,
         sa_column_kwargs={
             "server_default": func.now(),
             "onupdate": lambda: datetime.now(timezone.utc)

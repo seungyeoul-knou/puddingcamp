@@ -6,7 +6,7 @@ authors = [
     { name = "Seung Yeoul", email = "seungyeoul@kakao.com" }
 ]
 requires-python = ">=3.14"
-dependencies = []
+dependencies = ["sqlalchemy-utc (>=0.14.0,<0.15.0)"]
 
 [tool.poetry]
 package-mode = false
