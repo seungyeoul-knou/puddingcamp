@@ -4,6 +4,11 @@ from pydantic import EmailStr, AwareDatetime
 from sqlalchemy import UniqueConstraint
 from sqlalchemy_utc import UtcDateTime
 
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from appserver.apps.calendar.models import Calendar
+
 class User(SQLModel, table=True):
     __tablename__="users"
     __table_args__=(
@@ -35,6 +40,11 @@ class User(SQLModel, table=True):
     )
 
     oauth_accounts: list["OAuthAccount"] = Relationship(back_populates="user")
+
+    calendar: "Calendar" = Relationship(
+        back_populates="host",
+        sa_relationship_kwargs={"uselist": False, "single_parent": True},
+    )
 
 class OAuthAccount(SQLModel, table=True):
     __tablename__="oauth_accounts"
